@@ -6,9 +6,14 @@ import { isAuthenticated } from './data/api';
 
 // PWA Install prompt
 let deferredPrompt;
+const isLocalhost = window.location.hostname === 'localhost' || 
+                    window.location.hostname === '127.0.0.1';
+
+console.log('PWA Install: Initializing...');
+console.log('Is Localhost:', isLocalhost);
 
 window.addEventListener('beforeinstallprompt', (e) => {
-  console.log('beforeinstallprompt event fired');
+  console.log('✅ beforeinstallprompt event fired - App is installable!');
   // Prevent the mini-infobar from appearing on mobile
   e.preventDefault();
   // Stash the event so it can be triggered later
@@ -18,40 +23,67 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 function showInstallButton() {
-  // Add install button to header if not already there
-  const header = document.querySelector('.main-header');
-  if (!header || document.getElementById('install-btn')) return;
-  
-  const installBtn = document.createElement('button');
-  installBtn.id = 'install-btn';
-  installBtn.className = 'btn btn-primary';
-  installBtn.innerHTML = '⬇️ Install App';
-  installBtn.style.marginLeft = '10px';
-  
-  installBtn.addEventListener('click', async () => {
-    if (!deferredPrompt) return;
+  console.log('Creating install button...');
+  // Wait for DOM to be ready
+  setTimeout(() => {
+    const header = document.querySelector('.main-header');
+    if (!header) {
+      console.warn('Header not found, retrying...');
+      setTimeout(showInstallButton, 500);
+      return;
+    }
     
-    // Show the install prompt
-    deferredPrompt.prompt();
+    if (document.getElementById('install-btn')) {
+      console.log('Install button already exists');
+      return;
+    }
     
-    // Wait for the user to respond to the prompt
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`User response to the install prompt: ${outcome}`);
+    const installBtn = document.createElement('button');
+    installBtn.id = 'install-btn';
+    installBtn.className = 'btn btn-primary';
+    installBtn.innerHTML = '⬇️ Install App';
+    installBtn.style.marginLeft = '10px';
+    installBtn.title = 'Install Story Map as PWA';
     
-    // Clear the deferredPrompt
-    deferredPrompt = null;
-    installBtn.remove();
-  });
-  
-  header.appendChild(installBtn);
+    installBtn.addEventListener('click', async () => {
+      console.log('Install button clicked');
+      if (!deferredPrompt) {
+        console.error('No deferred prompt available');
+        return;
+      }
+      
+      // Show the install prompt
+      deferredPrompt.prompt();
+      
+      // Wait for the user to respond to the prompt
+      const { outcome } = await deferredPrompt.userChoice;
+      console.log(`User response to the install prompt: ${outcome}`);
+      
+      // Clear the deferredPrompt
+      deferredPrompt = null;
+      installBtn.remove();
+    });
+    
+    header.appendChild(installBtn);
+    console.log('✅ Install button added to header');
+  }, 100);
 }
 
 window.addEventListener('appinstalled', () => {
-  console.log('PWA was installed');
+  console.log('✅ PWA was installed successfully!');
   deferredPrompt = null;
   const installBtn = document.getElementById('install-btn');
   if (installBtn) installBtn.remove();
 });
+
+// Log when PWA criteria might not be met
+if (!('serviceWorker' in navigator)) {
+  console.error('❌ Service Worker not supported in this browser');
+}
+
+if (window.matchMedia('(display-mode: standalone)').matches) {
+  console.log('✅ App is running in standalone mode (already installed)');
+}
 
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
