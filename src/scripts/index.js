@@ -12,6 +12,14 @@ const isLocalhost = window.location.hostname === 'localhost' ||
 console.log('PWA Install: Initializing...');
 console.log('Is Localhost:', isLocalhost);
 
+if (isLocalhost) {
+  console.log('%c⚠️ DEVELOPMENT MODE', 'color: orange; font-weight: bold; font-size: 14px');
+  console.log('ℹ️ CORS errors for push/subscribe are NORMAL in localhost');
+  console.log('ℹ️ Push notifications will still work locally for testing');
+  console.log('ℹ️ Deploy to HTTPS for full server integration');
+  console.log('---');
+}
+
 window.addEventListener('beforeinstallprompt', (e) => {
   console.log('✅ beforeinstallprompt event fired - App is installable!');
   // Prevent the mini-infobar from appearing on mobile

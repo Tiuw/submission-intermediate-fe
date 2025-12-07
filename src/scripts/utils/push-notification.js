@@ -71,13 +71,15 @@ class PushNotificationManager {
       console.log('Push subscription successful:', subscription);
 
       // Send subscription to Dicoding API server
+      // Note: CORS may block this in localhost, but will work in production (HTTPS)
       try {
         const { subscribePush } = await import('../data/api.js');
         await subscribePush(subscription);
-        console.log('Subscription sent to server successfully');
+        console.log('✅ Subscription sent to server successfully');
       } catch (apiError) {
-        console.error('Failed to send subscription to server:', apiError);
-        // Continue anyway - subscription still works locally
+        console.warn('⚠️ Failed to send subscription to server (CORS in localhost is normal):', apiError.message);
+        console.log('ℹ️ Subscription still works locally. Deploy to HTTPS for full server integration.');
+        // Continue anyway - subscription still works locally for testing
       }
 
       this.isSubscribed = true;
