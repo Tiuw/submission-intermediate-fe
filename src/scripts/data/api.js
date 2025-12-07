@@ -5,6 +5,8 @@ const ENDPOINTS = {
   LOGIN: `${CONFIG.BASE_URL}/login`,
   STORIES: `${CONFIG.BASE_URL}/stories`,
   ADD_STORY: `${CONFIG.BASE_URL}/stories`,
+  PUSH_SUBSCRIBE: `${CONFIG.BASE_URL}/push/subscribe`,
+  PUSH_UNSUBSCRIBE: `${CONFIG.BASE_URL}/push/unsubscribe`,
 };
 
 // Auth Helper
@@ -114,6 +116,45 @@ export async function addStory(formData) {
 
   if (!response.ok) {
     throw new Error(data.message || 'Failed to add story');
+  }
+
+  return data;
+}
+
+// Push Notification API
+export async function subscribePush(subscription) {
+  const response = await fetch(ENDPOINTS.PUSH_SUBSCRIBE, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify({ subscription }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to subscribe push notification');
+  }
+
+  return data;
+}
+
+export async function unsubscribePush(endpoint) {
+  const response = await fetch(ENDPOINTS.PUSH_UNSUBSCRIBE, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`,
+    },
+    body: JSON.stringify({ endpoint }),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Failed to unsubscribe push notification');
   }
 
   return data;

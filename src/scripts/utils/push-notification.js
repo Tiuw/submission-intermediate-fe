@@ -70,6 +70,16 @@ class PushNotificationManager {
 
       console.log('Push subscription successful:', subscription);
 
+      // Send subscription to Dicoding API server
+      try {
+        const { subscribePush } = await import('../data/api.js');
+        await subscribePush(subscription);
+        console.log('Subscription sent to server successfully');
+      } catch (apiError) {
+        console.error('Failed to send subscription to server:', apiError);
+        // Continue anyway - subscription still works locally
+      }
+
       this.isSubscribed = true;
       this.updateUI();
       
@@ -97,7 +107,17 @@ class PushNotificationManager {
         return true;
       }
 
-      // Unsubscribe
+      // Send unsubscribe to server first
+      try {
+        const { unsubscribePush } = await import('../data/api.js');
+        await unsubscribePush(subscription.endpoint);
+        console.log('Unsubscription sent to server successfully');
+      } catch (apiError) {
+        console.error('Failed to send unsubscription to server:', apiError);
+        // Continue anyway
+      }
+
+      // Unsubscribe locally
       const successful = await subscription.unsubscribe();
       
       if (successful) {
