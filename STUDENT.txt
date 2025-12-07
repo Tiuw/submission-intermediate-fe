@@ -1,6 +1,6 @@
 Nama: Danendra Alvyn
 
-APP_URL=https://submission-intermediate-fe.vercel.app/
+APP_URL=https://submission-intermediate-fe.netlify.app/
 
 Catatan Teknis:
 - Aplikasi menggunakan Story API dari Dicoding
