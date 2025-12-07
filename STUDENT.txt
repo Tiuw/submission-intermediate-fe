@@ -1,9 +1,6 @@
-Nama: [Silakan isi nama Anda]
-Email: [Silakan isi email Anda]
-ID Dicoding: [Silakan isi ID Dicoding Anda]
+Nama: Danendra Alvyn
 
-APP_URL=<url_aplikasi_setelah_deploy>
-MAP_SERVICE_API_KEY=tidak_diperlukan_karena_menggunakan_openstreetmap
+APP_URL=https://submission-intermediate-fe.vercel.app/
 
 Catatan Teknis:
 - Aplikasi menggunakan Story API dari Dicoding
