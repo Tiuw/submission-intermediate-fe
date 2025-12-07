@@ -6,7 +6,6 @@ const ENDPOINTS = {
   STORIES: `${CONFIG.BASE_URL}/stories`,
   ADD_STORY: `${CONFIG.BASE_URL}/stories`,
   PUSH_SUBSCRIBE: `${CONFIG.BASE_URL}/push/subscribe`,
-  PUSH_UNSUBSCRIBE: `${CONFIG.BASE_URL}/push/unsubscribe`,
 };
 
 // Auth Helper
@@ -141,23 +140,7 @@ export async function subscribePush(subscription) {
   return data;
 }
 
-export async function unsubscribePush(endpoint) {
-  const response = await fetch(ENDPOINTS.PUSH_UNSUBSCRIBE, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${getToken()}`,
-    },
-    body: JSON.stringify({ endpoint }),
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Failed to unsubscribe push notification');
-  }
-
-  return data;
-}
+// Note: unsubscribePush endpoint not supported by Dicoding API (CORS issue)
+// Unsubscribe is handled locally in push-notification.js
 
 export { getToken, saveToken, removeToken, isAuthenticated };

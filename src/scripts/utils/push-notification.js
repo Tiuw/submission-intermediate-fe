@@ -107,15 +107,9 @@ class PushNotificationManager {
         return true;
       }
 
-      // Send unsubscribe to server first
-      try {
-        const { unsubscribePush } = await import('../data/api.js');
-        await unsubscribePush(subscription.endpoint);
-        console.log('Unsubscription sent to server successfully');
-      } catch (apiError) {
-        console.error('Failed to send unsubscription to server:', apiError);
-        // Continue anyway
-      }
+      // Note: Dicoding API doesn't support unsubscribe endpoint (CORS issue)
+      // So we only unsubscribe locally
+      console.log('Unsubscribing locally (server unsubscribe not supported)');
 
       // Unsubscribe locally
       const successful = await subscription.unsubscribe();
