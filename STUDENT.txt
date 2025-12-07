@@ -1,0 +1,15 @@
+Nama: [Silakan isi nama Anda]
+Email: [Silakan isi email Anda]
+ID Dicoding: [Silakan isi ID Dicoding Anda]
+
+APP_URL=<url_aplikasi_setelah_deploy>
+MAP_SERVICE_API_KEY=tidak_diperlukan_karena_menggunakan_openstreetmap
+
+Catatan Teknis:
+- Aplikasi menggunakan Story API dari Dicoding
+- Map menggunakan OpenStreetMap dan CartoDB (tidak memerlukan API key)
+- Arsitektur MVP (Model-View-Presenter) diterapkan
+- Custom transition view menggunakan View Transitions API
+- Multiple tile layer tersedia
+- Fitur kamera langsung untuk upload gambar
+- Skip to content dan full keyboard navigation tersedia

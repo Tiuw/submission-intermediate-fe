@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Story Map - Aplikasi untuk berbagi cerita dengan lokasi di peta interaktif" />
+    <meta name="theme-color" content="#2196F3" />
+    <link rel="shortcut icon" href="/favicon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/images/icon-192x192.png" />
+    <title>Story Map - Bagikan Cerita Anda</title>
+
+    <script type="module" src="/scripts/index.js"></script>
+  </head>
+  <body>
+    <!-- Skip to Content Link -->
+    <a href="#main-content" class="skip-link" onclick="document.getElementById('main-content').focus(); return false;">Lewati ke konten utama</a>
+
+    <header role="banner">
+      <div class="main-header container">
+        <a class="brand-name" href="#/" aria-label="Story Map - Beranda">📖 Story Map</a>
+
+        <nav id="navigation-drawer" class="navigation-drawer" role="navigation" aria-label="Navigasi utama">
+          <ul id="nav-list" class="nav-list">
+            <li><a href="#/">Beranda</a></li>
+            <li><a href="#/favorites">Favorit</a></li>
+            <li><a href="#/about">Tentang</a></li>
+          </ul>
+        </nav>
+
+        <button id="drawer-button" class="drawer-button" aria-label="Buka menu navigasi" aria-expanded="false">☰</button>
+      </div>
+    </header>
+
+    <main id="main-content" class="main-content" role="main"></main>
+
+    <footer role="contentinfo" class="footer">
+      <div class="container">
+        <p>&copy; 2025 Story Map. Submission Dicoding Front-End Intermediate.</p>
+      </div>
+    </footer>
+  </body>
+</html>
