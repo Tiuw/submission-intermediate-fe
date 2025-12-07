@@ -4,6 +4,55 @@ import '../styles/styles.css';
 import App from './pages/app';
 import { isAuthenticated } from './data/api';
 
+// PWA Install prompt
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  console.log('beforeinstallprompt event fired');
+  // Prevent the mini-infobar from appearing on mobile
+  e.preventDefault();
+  // Stash the event so it can be triggered later
+  deferredPrompt = e;
+  // Show install button
+  showInstallButton();
+});
+
+function showInstallButton() {
+  // Add install button to header if not already there
+  const header = document.querySelector('.main-header');
+  if (!header || document.getElementById('install-btn')) return;
+  
+  const installBtn = document.createElement('button');
+  installBtn.id = 'install-btn';
+  installBtn.className = 'btn btn-primary';
+  installBtn.innerHTML = '⬇️ Install App';
+  installBtn.style.marginLeft = '10px';
+  
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    
+    // Show the install prompt
+    deferredPrompt.prompt();
+    
+    // Wait for the user to respond to the prompt
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    
+    // Clear the deferredPrompt
+    deferredPrompt = null;
+    installBtn.remove();
+  });
+  
+  header.appendChild(installBtn);
+}
+
+window.addEventListener('appinstalled', () => {
+  console.log('PWA was installed');
+  deferredPrompt = null;
+  const installBtn = document.getElementById('install-btn');
+  if (installBtn) installBtn.remove();
+});
+
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
