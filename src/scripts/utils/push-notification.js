@@ -129,13 +129,19 @@ class PushNotificationManager {
         this.updateUI();
         
         // Show info notification
-        this.showLocalNotification(
-          'Notifikasi Dinonaktifkan',
-          'Anda tidak akan menerima notifikasi lagi.'
-        );
+        try {
+          await this.showLocalNotification(
+            'Notifikasi Dinonaktifkan',
+            'Anda tidak akan menerima notifikasi lagi.'
+          );
+        } catch (notifError) {
+          console.log('Could not show notification (expected if permission was revoked)');
+        }
+        
+        return true;
       }
 
-      return successful;
+      return false;
     } catch (error) {
       console.error('Error unsubscribing from push:', error);
       return false;
