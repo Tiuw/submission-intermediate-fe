@@ -24,15 +24,13 @@ export default class AddStoryPage {
             <div class="form-group">
               <label for="story-photo">Foto Cerita *</label>
               <div class="photo-input-group">
-                <label for="story-photo" class="file-input-label">
-                  <input 
-                    type="file" 
-                    id="story-photo" 
-                    name="photo" 
-                    accept="image/*"
-                    aria-required="true"
-                  />
-                </label>
+                <input 
+                  type="file" 
+                  id="story-photo" 
+                  name="photo" 
+                  accept="image/*"
+                  aria-required="true"
+                />
                 <button type="button" id="camera-btn" class="btn btn-secondary">
                   📷 Gunakan Kamera
                 </button>

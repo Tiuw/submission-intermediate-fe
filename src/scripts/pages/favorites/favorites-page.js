@@ -14,7 +14,7 @@ const FavoritesPage = {
           <!-- Search and Filter -->
           <div class="favorites-controls">
             <div class="search-box">
-              <label for="search-favorites" class="visually-hidden">Cari Cerita Favorit</label>
+              <label for="search-favorites" class="visually-hidden">Cari cerita favorit</label>
               <input 
                 type="text" 
                 id="search-favorites" 
@@ -150,12 +150,12 @@ const FavoritesPage = {
               : ''
             }
           </div>
-          <div class="favorite-actions">
+          <div class="favorite-actions" style="display: flex; flex-direction: column; gap: 8px;">
             <button 
               class="btn-action btn-view" 
               data-story='${JSON.stringify(story).replace(/'/g, "&apos;")}'
               aria-label="Lihat detail"
-              title="Lihat detail cerita"
+              style="order: 1;"
             >
               👁️ Detail
             </button>
@@ -163,7 +163,7 @@ const FavoritesPage = {
               class="btn-action btn-remove" 
               data-id="${story.id}"
               aria-label="Hapus dari favorit"
-              title="Hapus dari favorit"
+              style="order: 2;"
             >
               🗑️ Hapus
             </button>
@@ -235,6 +235,11 @@ const FavoritesPage = {
               : ''
             }
           </div>
+          <div class="modal-actions">
+            <button class="btn-action btn-remove" data-story-id="${story.id}" aria-label="Hapus dari favorit">
+              🗑️ Hapus dari Favorit
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -253,6 +258,15 @@ const FavoritesPage = {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeModal();
     });
+
+    // Handle delete button in modal
+    const deleteBtn = modal.querySelector('.btn-remove');
+    if (deleteBtn) {
+      deleteBtn.addEventListener('click', async () => {
+        closeModal();
+        await this._removeFavorite(story.id);
+      });
+    }
   },
 
   _initializeEventListeners() {

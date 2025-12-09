@@ -5,7 +5,7 @@ const ENDPOINTS = {
   LOGIN: `${CONFIG.BASE_URL}/login`,
   STORIES: `${CONFIG.BASE_URL}/stories`,
   ADD_STORY: `${CONFIG.BASE_URL}/stories`,
-  PUSH_SUBSCRIBE: `${CONFIG.BASE_URL}/push/subscribe`,
+  PUSH_SUBSCRIBE: `${CONFIG.BASE_URL}/notifications/subscribe`,
 };
 
 // Auth Helper
@@ -121,8 +121,6 @@ export async function addStory(formData) {
 }
 
 // Push Notification API
-// Sesuai dokumentasi Dicoding Story API: POST /v1/push/subscribe
-// Body: { subscription: PushSubscription object }
 export async function subscribePush(subscription) {
   const response = await fetch(ENDPOINTS.PUSH_SUBSCRIBE, {
     method: 'POST',
@@ -130,7 +128,7 @@ export async function subscribePush(subscription) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${getToken()}`,
     },
-    body: JSON.stringify({ subscription }),
+    body: JSON.stringify(subscription),
   });
 
   const data = await response.json();
