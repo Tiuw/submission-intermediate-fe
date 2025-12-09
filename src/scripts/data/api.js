@@ -121,6 +121,8 @@ export async function addStory(formData) {
 }
 
 // Push Notification API
+// Sesuai dokumentasi Dicoding Story API: POST /v1/push/subscribe
+// Body: { subscription: PushSubscription object }
 export async function subscribePush(subscription) {
   const response = await fetch(ENDPOINTS.PUSH_SUBSCRIBE, {
     method: 'POST',

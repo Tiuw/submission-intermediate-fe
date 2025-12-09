@@ -14,6 +14,7 @@ const FavoritesPage = {
           <!-- Search and Filter -->
           <div class="favorites-controls">
             <div class="search-box">
+              <label for="search-favorites" class="visually-hidden">Cari Cerita Favorit</label>
               <input 
                 type="text" 
                 id="search-favorites" 
@@ -154,6 +155,7 @@ const FavoritesPage = {
               class="btn-action btn-remove" 
               data-id="${story.id}"
               aria-label="Hapus dari favorit"
+              title="Hapus dari favorit"
             >
               🗑️ Hapus
             </button>
@@ -161,6 +163,7 @@ const FavoritesPage = {
               class="btn-action btn-view" 
               data-story='${JSON.stringify(story).replace(/'/g, "&apos;")}'
               aria-label="Lihat detail"
+              title="Lihat detail cerita"
             >
               👁️ Detail
             </button>

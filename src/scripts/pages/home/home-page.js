@@ -18,7 +18,7 @@ export default class HomePage {
           
           <!-- Push Notification Toggle -->
           <div class="notification-toggle">
-            <label class="switch">
+            <label for="push-toggle" class="switch">
               <input type="checkbox" id="push-toggle" aria-label="Toggle push notifications">
               <span class="slider"></span>
             </label>
