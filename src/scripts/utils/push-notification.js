@@ -92,15 +92,21 @@ class PushNotificationManager {
       this.isSubscribed = true;
       this.updateUI();
       
-      // Show success notification
-      this.showLocalNotification(
-        'Notifikasi Aktif!',
-        'Anda akan menerima notifikasi untuk cerita baru.'
-      );
+      // Show success notification (optional, might fail if permission issues)
+      try {
+        await this.showLocalNotification(
+          'Notifikasi Aktif!',
+          'Anda akan menerima notifikasi untuk cerita baru.'
+        );
+      } catch (notifError) {
+        console.log('Could not show success notification, but subscription is active');
+      }
 
       return true;
     } catch (error) {
       console.error('Error subscribing to push:', error);
+      this.isSubscribed = false;
+      this.updateUI();
       alert(`Gagal mengaktifkan notifikasi: ${error.message}`);
       return false;
     }
@@ -113,6 +119,8 @@ class PushNotificationManager {
       
       if (!subscription) {
         console.log('No subscription to unsubscribe');
+        this.isSubscribed = false;
+        this.updateUI();
         return true;
       }
 
@@ -127,16 +135,6 @@ class PushNotificationManager {
         console.log('Push unsubscription successful');
         this.isSubscribed = false;
         this.updateUI();
-        
-        // Show info notification
-        try {
-          await this.showLocalNotification(
-            'Notifikasi Dinonaktifkan',
-            'Anda tidak akan menerima notifikasi lagi.'
-          );
-        } catch (notifError) {
-          console.log('Could not show notification (expected if permission was revoked)');
-        }
         
         return true;
       }
