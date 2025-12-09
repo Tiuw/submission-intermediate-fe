@@ -152,20 +152,20 @@ const FavoritesPage = {
           </div>
           <div class="favorite-actions">
             <button 
-              class="btn-action btn-remove" 
-              data-id="${story.id}"
-              aria-label="Hapus dari favorit"
-              title="Hapus dari favorit"
-            >
-              🗑️ Hapus
-            </button>
-            <button 
               class="btn-action btn-view" 
               data-story='${JSON.stringify(story).replace(/'/g, "&apos;")}'
               aria-label="Lihat detail"
               title="Lihat detail cerita"
             >
               👁️ Detail
+            </button>
+            <button 
+              class="btn-action btn-remove" 
+              data-id="${story.id}"
+              aria-label="Hapus dari favorit"
+              title="Hapus dari favorit"
+            >
+              🗑️ Hapus
             </button>
           </div>
         </div>
