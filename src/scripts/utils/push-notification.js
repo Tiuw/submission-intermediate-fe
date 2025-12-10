@@ -131,9 +131,19 @@ class PushNotificationManager {
         return true;
       }
 
-      // Note: Dicoding API doesn't support unsubscribe endpoint (CORS issue)
-      // So we only unsubscribe locally
-      console.log('Unsubscribing locally (server unsubscribe not supported)');
+      // Get endpoint before unsubscribing locally
+      const endpoint = subscription.endpoint;
+
+      // Unsubscribe from server first
+      try {
+        console.log('📤 Unsubscribing from server...');
+        const { unsubscribePush } = await import('../data/api.js');
+        await unsubscribePush(endpoint);
+        console.log('✅ Unsubscribed from server successfully');
+      } catch (apiError) {
+        console.warn('⚠️ Failed to unsubscribe from server:', apiError.message);
+        // Continue with local unsubscribe even if server fails
+      }
 
       // Unsubscribe locally
       const successful = await subscription.unsubscribe();
@@ -142,12 +152,6 @@ class PushNotificationManager {
         console.log('Push unsubscription successful');
         this.isSubscribed = false;
         this.updateUI();
-        
-        // Show info notification
-        this.showLocalNotification(
-          'Notifikasi Dinonaktifkan',
-          'Anda tidak akan menerima notifikasi lagi.'
-        );
       }
 
       return successful;

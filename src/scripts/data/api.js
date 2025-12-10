@@ -162,7 +162,35 @@ export async function subscribePush(subscription) {
   return data;
 }
 
-// Note: unsubscribePush endpoint not supported by Dicoding API (CORS issue)
-// Unsubscribe is handled locally in push-notification.js
+// Unsubscribe from push notifications
+export async function unsubscribePush(endpoint) {
+  console.log('📤 DELETE to:', ENDPOINTS.PUSH_SUBSCRIBE);
+  console.log('📤 Endpoint:', endpoint);
+  
+  const response = await fetch(ENDPOINTS.PUSH_SUBSCRIBE, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${getToken()}`,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+    },
+    cache: 'no-store',
+    body: JSON.stringify({ endpoint }),
+  });
+
+  const data = await response.json();
+  
+  console.log('📥 Response status:', response.status);
+  console.log('📥 Response data:', data);
+
+  if (!response.ok) {
+    console.error('❌ Server error:', data.message || data.error || 'Unknown error');
+    throw new Error(data.message || data.error || 'Failed to unsubscribe push notification');
+  }
+
+  console.log('✅ Successfully unsubscribed from push notifications on server');
+  return data;
+}
 
 export { getToken, saveToken, removeToken, isAuthenticated };
