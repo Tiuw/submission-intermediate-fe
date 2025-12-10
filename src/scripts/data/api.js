@@ -141,7 +141,10 @@ export async function subscribePush(subscription) {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${getToken()}`,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
     },
+    cache: 'no-store',
     body: JSON.stringify(payload),
   });
 
