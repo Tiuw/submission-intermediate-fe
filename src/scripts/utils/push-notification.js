@@ -71,29 +71,49 @@ class PushNotificationManager {
       console.log('Push subscription successful:', subscription);
 
       // Send subscription to Dicoding API server
-      // Note: CORS may block this in localhost, but will work in production (HTTPS)
+      console.log('📤 Sending subscription to server...', subscription.toJSON());
+      
       try {
-        console.log('📤 Sending subscription to server...', subscription.toJSON());
         const { subscribePush } = await import('../data/api.js');
         const result = await subscribePush(subscription);
         console.log('✅ Subscription sent to server successfully:', result);
+        
+        this.isSubscribed = true;
+        this.updateUI();
+        
+        // Show success notification
+        this.showLocalNotification(
+          'Notifikasi Aktif!',
+          'Anda akan menerima notifikasi untuk cerita baru.'
+        );
+
+        return true;
       } catch (apiError) {
-        console.warn('⚠️ Failed to send subscription to server (CORS in localhost is normal):', apiError.message);
-        console.error('Full error:', apiError);
-        console.log('ℹ️ Subscription still works locally. Deploy to HTTPS for full server integration.');
-        // Continue anyway - subscription still works locally for testing
+        console.error('❌ Failed to send subscription to server:', apiError);
+        
+        // Check if it's a CORS error in localhost (only ignore CORS in localhost)
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1';
+        
+        if (isLocalhost && apiError.message.includes('Failed to fetch')) {
+          console.warn('⚠️ CORS error in localhost - this is normal during development');
+          console.log('ℹ️ Subscription registered locally. Deploy to HTTPS for full server integration.');
+          
+          this.isSubscribed = true;
+          this.updateUI();
+          
+          this.showLocalNotification(
+            'Notifikasi Aktif (Localhost)',
+            'Notifikasi aktif di localhost. Deploy ke HTTPS untuk notifikasi dari server.'
+          );
+          
+          return true;
+        }
+        
+        // For production or non-CORS errors, throw the error
+        console.error('❌ Cannot subscribe to push notifications:', apiError.message);
+        throw new Error(`Gagal mendaftarkan notifikasi ke server: ${apiError.message}`);
       }
-
-      this.isSubscribed = true;
-      this.updateUI();
-      
-      // Show success notification
-      this.showLocalNotification(
-        'Notifikasi Aktif!',
-        'Anda akan menerima notifikasi untuk cerita baru.'
-      );
-
-      return true;
     } catch (error) {
       console.error('Error subscribing to push:', error);
       alert(`Gagal mengaktifkan notifikasi: ${error.message}`);

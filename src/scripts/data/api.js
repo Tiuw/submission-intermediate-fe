@@ -125,6 +125,10 @@ export async function subscribePush(subscription) {
   // Convert PushSubscription to JSON format
   const subscriptionJSON = subscription.toJSON();
   
+  console.log('📤 POST to:', ENDPOINTS.PUSH_SUBSCRIBE);
+  console.log('📤 Payload:', JSON.stringify(subscriptionJSON, null, 2));
+  console.log('📤 Token:', getToken() ? 'Present' : 'Missing');
+  
   const response = await fetch(ENDPOINTS.PUSH_SUBSCRIBE, {
     method: 'POST',
     headers: {
@@ -135,11 +139,16 @@ export async function subscribePush(subscription) {
   });
 
   const data = await response.json();
+  
+  console.log('📥 Response status:', response.status);
+  console.log('📥 Response data:', data);
 
   if (!response.ok) {
-    throw new Error(data.message || 'Failed to subscribe push notification');
+    console.error('❌ Server error:', data.message || data.error || 'Unknown error');
+    throw new Error(data.message || data.error || 'Failed to subscribe push notification');
   }
 
+  console.log('✅ Successfully subscribed to push notifications on server');
   return data;
 }
 
