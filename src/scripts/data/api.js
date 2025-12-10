@@ -5,7 +5,7 @@ const ENDPOINTS = {
   LOGIN: `${CONFIG.BASE_URL}/login`,
   STORIES: `${CONFIG.BASE_URL}/stories`,
   ADD_STORY: `${CONFIG.BASE_URL}/stories`,
-  PUSH_SUBSCRIBE: `${CONFIG.BASE_URL}/notifications/subscribe`,
+  PUSH_SUBSCRIBE: `${CONFIG.BASE_URL}/push/subscribe`,
 };
 
 // Auth Helper
@@ -122,13 +122,16 @@ export async function addStory(formData) {
 
 // Push Notification API
 export async function subscribePush(subscription) {
+  // Convert PushSubscription to JSON format
+  const subscriptionJSON = subscription.toJSON();
+  
   const response = await fetch(ENDPOINTS.PUSH_SUBSCRIBE, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${getToken()}`,
     },
-    body: JSON.stringify(subscription),
+    body: JSON.stringify(subscriptionJSON),
   });
 
   const data = await response.json();
