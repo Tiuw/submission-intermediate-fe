@@ -5,7 +5,7 @@ const ENDPOINTS = {
   LOGIN: `${CONFIG.BASE_URL}/login`,
   STORIES: `${CONFIG.BASE_URL}/stories`,
   ADD_STORY: `${CONFIG.BASE_URL}/stories`,
-  PUSH_SUBSCRIBE: `${CONFIG.BASE_URL}/push/subscribe`,
+  PUSH_SUBSCRIBE: `${CONFIG.BASE_URL}/notifications/subscribe`,
 };
 
 // Auth Helper
@@ -125,8 +125,15 @@ export async function subscribePush(subscription) {
   // Convert PushSubscription to JSON format
   const subscriptionJSON = subscription.toJSON();
   
+  // Format according to Dicoding API documentation:
+  // endpoint: string, keys: { p256dh: string, auth: string }
+  const payload = {
+    endpoint: subscriptionJSON.endpoint,
+    keys: subscriptionJSON.keys, // { p256dh, auth }
+  };
+  
   console.log('📤 POST to:', ENDPOINTS.PUSH_SUBSCRIBE);
-  console.log('📤 Payload:', JSON.stringify(subscriptionJSON, null, 2));
+  console.log('📤 Payload:', JSON.stringify(payload, null, 2));
   console.log('📤 Token:', getToken() ? 'Present' : 'Missing');
   
   const response = await fetch(ENDPOINTS.PUSH_SUBSCRIBE, {
@@ -135,7 +142,7 @@ export async function subscribePush(subscription) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${getToken()}`,
     },
-    body: JSON.stringify(subscriptionJSON),
+    body: JSON.stringify(payload),
   });
 
   const data = await response.json();
